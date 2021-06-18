@@ -48,4 +48,25 @@ class PostController extends Controller{
             ->route('posts.index')
             ->with('message', 'Post deletado com sucesso!');
     }
+
+    public function edit($id){
+        
+        if(!$post = Post::find($id)){
+            return redirect()->back();
+        }
+        return view('admin.posts.edit', compact('post'));
+    }
+
+    public function update(StoreUpdatePost $request, $id){
+        
+        if(!$post = Post::find($id)){
+            return redirect()->back();
+        }
+        
+        $post->update($request->all());
+
+        return redirect()
+        ->route('posts.index')
+        ->with('message', 'Post editado com sucesso!');
+    }
 }
