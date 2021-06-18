@@ -7,8 +7,7 @@ use App\Http\Requests\StoreUpdatePost;
 use Illuminate\Http\Request;
 
 
-class PostController extends Controller
-{
+class PostController extends Controller{
     public function index(){
 
         $posts = Post::get();
@@ -26,6 +25,27 @@ class PostController extends Controller
         
         Post::create($request->all());
 
-        return redirect()->route('posts.index');
+        return redirect()
+            ->route('posts.index')
+            ->with('message', 'Post criado com sucesso!');
+    }
+
+    public function show($id){
+        //$post = Post::where('id', $id)->first();
+        if(!$post = Post::find($id)){
+            return redirect()->route('posts.index');
+        }
+        return view('admin.posts.show', compact('post'));
+    }
+
+    public function destroy($id){
+        if(!$post = Post::find($id))
+            return redirect()->route('posts.index');
+        
+        $post->delete();
+
+        return redirect()
+            ->route('posts.index')
+            ->with('message', 'Post deletado com sucesso!');
     }
 }
